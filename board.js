@@ -11,14 +11,14 @@ class Board {
                        );
   }
 
-  findSquareByCoordinate = (coordinate) => {
+  findSquareByCoordinate(coordinate) {
     const coordinateFinder = (square) => {
       return square.getCoordinates().equalsOtherCoordinate(coordinate);
     }
     return this.#findSquare(coordinateFinder);
   }
 
-  findSquareByName = (name) => {
+  findSquareByName(name) {
     const nameFinder = (square) => square.getCoordinates().name() === name;
     return this.#findSquare(nameFinder);
   }
