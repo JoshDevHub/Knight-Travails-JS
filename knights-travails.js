@@ -18,12 +18,10 @@ const ChessSquare = (x, y) => {
   const name = () => `${x}, ${y}`
 
   const createKnightMoves = () => {
-    return KNIGHT_OFFSETS
-             .map((offset) => newSquareFrom(...offset))
-             .filter((square) => square !== undefined);
+    return KNIGHT_OFFSETS.map(newSquareFrom).filter(Boolean);
   }
 
-  const newSquareFrom = (xOffset, yOffset) => {
+  const newSquareFrom = ([ xOffset, yOffset ]) => {
     const [newX, newY] = [xPos + xOffset, yPos + yOffset];
     if (0 <= newX && newX < 8 && 0 <= newY && y < 8) {
       return ChessSquare(newX, newY);
