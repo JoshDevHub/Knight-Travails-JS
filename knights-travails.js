@@ -13,15 +13,13 @@ const ChessSquare = (x, y) => {
   ]
 
   const getPredecessor = () => predecessor;
-  const setPredecessor = (newPred) => {
-    predecessor = predecessor || newPred;
-  }
+  const setPredecessor = (newPred) => { predecessor ||= newPred }
 
   const name = () => `${x}, ${y}`
 
   const createKnightMoves = () => {
     return KNIGHT_OFFSETS
-             .map((offset) => newSquareFrom(offset[0], offset[1]))
+             .map((offset) => newSquareFrom(...offset))
              .filter((square) => square !== undefined);
   }
 
@@ -35,7 +33,7 @@ const ChessSquare = (x, y) => {
   if (squareRegistry.has(name())) {
     return squareRegistry.get(name());
   } else {
-    newSquare = { name, getPredecessor, setPredecessor, createKnightMoves }
+    const newSquare = { name, getPredecessor, setPredecessor, createKnightMoves }
     squareRegistry.set(name(), newSquare);
     return newSquare;
   }
@@ -47,18 +45,18 @@ const knightsTravails = (start, finish) => {
   const origin = ChessSquare(...start);
   const target = ChessSquare(...finish);
 
-  const queue = [origin];
-  while (!queue.includes(target)) {
+  const queue = [target];
+  while (!queue.includes(origin)) {
     const currentSquare = queue.shift();
 
     const enqueueList = currentSquare.createKnightMoves();
     enqueueList.forEach((square) => square.setPredecessor(currentSquare));
     queue.push(...enqueueList);
   }
-  const path = [target]
-  while (!path.includes(origin)) {
-    const prevSquare = path[0].getPredecessor();
-    path.unshift(prevSquare);
+  const path = [origin]
+  while (!path.includes(target)) {
+    const nextSquare = path.at(-1).getPredecessor();
+    path.push(nextSquare);
   }
   console.log(`The shortest path was ${path.length - 1} moves!`);
   console.log("The moves were:");
